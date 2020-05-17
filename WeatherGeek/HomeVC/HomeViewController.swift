@@ -13,38 +13,21 @@ import CoreLocation
 class HomeViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
+    var resultSearchController: UISearchController? = nil
+    var selectedPin: MKPlacemark? = nil
+    var locManager = CLLocationManager()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         initView()
-        
     }
     
     private func initView(){
-        var locManager = CLLocationManager()
-        var currentLocation: CLLocation?
+        mapView.register(MyAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         
-        locManager.delegate = self
-        locManager.desiredAccuracy = kCLLocationAccuracyBest
-        locManager.requestWhenInUseAuthorization()
-        locManager.startUpdatingLocation()
-        
-        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse || CLLocationManager.authorizationStatus() ==  .authorizedAlways {
-            currentLocation = locManager.location
-        }
-        
-        print(currentLocation?.coordinate.longitude)
-        print(currentLocation?.coordinate.latitude)
-        
-        if let coordinate = currentLocation?.coordinate {
-            print(coordinate.longitude)
-            let initialLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-            
-            centerMapOnLocation(location: initialLocation)
-            setupUI(coordinate: coordinate)
-        }
+        showCurrentLocationPin()
+        setUpSearchAddressResult()
     }
 
     //MARK: - Helper Functions
@@ -55,9 +38,66 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     //MARK: - Add an annotation
-    private func setupUI(coordinate: CLLocationCoordinate2D){
-        let _annotation = MyAnnotation(title: "Lê Duy", locationName: "What?", discipline: "blala", coordinate: CLLocationCoordinate2DMake(coordinate.latitude, coordinate.longitude))
+    private func setupUI(location: CLLocation, locationName:String = "", city:String = ""){
+        let _annotation = MyAnnotation(title: "\(locationName)", locationName: "\(city)", discipline: "Me", coordinate: location.coordinate)
         mapView.addAnnotation(_annotation)
+    }
+    
+    private func showCurrentLocationPin(){
+        locManager.requestWhenInUseAuthorization()
+        var currentLocation: CLLocation?
+
+        if
+           CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
+           CLLocationManager.authorizationStatus() ==  .authorizedAlways
+        {
+            currentLocation = locManager.location
+        }
+        if let current = currentLocation {
+            let coordinate = current.coordinate
+            let initialLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+                    
+            centerMapOnLocation(location: initialLocation)
+            setupUI(location: initialLocation)
+        }
+    }
+    
+    private func setUpSearchAddressResult(){
+        // Setup search results table
+        let locationSearchTable = storyboard!.instantiateViewController(identifier: "LocationSearchTableVC") as! LocationSearchTableVC
+        locationSearchTable.handlerMapSearchDelegate = self
+        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
+        resultSearchController?.searchResultsUpdater = locationSearchTable as UISearchResultsUpdating
+        locationSearchTable.mapView = mapView
+        
+        let searchBar = resultSearchController!.searchBar
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Search for places"
+        searchBar.setShowsCancelButton(true, animated: true)
+        navigationItem.titleView = resultSearchController?.searchBar
+        resultSearchController?.hidesNavigationBarDuringPresentation = false
+        definesPresentationContext = true
     }
 }
 
+
+extension HomeViewController: HandleMapSearch {
+    func dropPinZoomIn(placemark: MKPlacemark) {
+        selectedPin = placemark
+        mapView.removeAnnotations(mapView.annotations)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = placemark.coordinate
+        
+        if let city = placemark.locality, let state = placemark.administrativeArea, let name = placemark.name {
+            annotation.subtitle = "\(name), \(city) "
+            mapView.addAnnotation(annotation)
+            let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
+            let currentLocation = CLLocation(latitude: placemark.coordinate.latitude, longitude: placemark.coordinate.longitude)
+            centerMapOnLocation(location: currentLocation)
+            setupUI(location: currentLocation, locationName: name, city: city)
+            mapView.setRegion(region, animated: true)
+        }
+    }
+}

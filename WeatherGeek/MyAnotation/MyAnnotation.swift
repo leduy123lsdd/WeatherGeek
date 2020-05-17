@@ -26,4 +26,15 @@ class MyAnnotation: NSObject, MKAnnotation {
         return locationName
     }
     
+    // Market Tint Color for discipline
+    var markerTintColor: UIColor {
+        switch discipline {
+        case "A":
+            return .red
+        case "B":
+            return .blue
+        default:
+            return .systemPink
+        }
+    }
 }

@@ -16,6 +16,7 @@
 		0CDEDA1C24704DC900378D27 /* LocationSearchTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDEDA1B24704DC900378D27 /* LocationSearchTableVC.swift */; };
 		0CDEDA1F24704E8500378D27 /* MyAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDEDA1E24704E8500378D27 /* MyAnnotation.swift */; };
 		0CDEDA22247051BA00378D27 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDEDA21247051BA00378D27 /* MapKit.framework */; };
+		0CDEDA242471251A00378D27 /* MyAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDEDA232471251A00378D27 /* MyAnnotationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		0CDEDA1B24704DC900378D27 /* LocationSearchTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchTableVC.swift; sourceTree = "<group>"; };
 		0CDEDA1E24704E8500378D27 /* MyAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAnnotation.swift; sourceTree = "<group>"; };
 		0CDEDA21247051BA00378D27 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		0CDEDA232471251A00378D27 /* MyAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAnnotationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				0CDEDA1E24704E8500378D27 /* MyAnnotation.swift */,
+				0CDEDA232471251A00378D27 /* MyAnnotationView.swift */,
 			);
 			path = MyAnotation;
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0CDEDA1F24704E8500378D27 /* MyAnnotation.swift in Sources */,
+				0CDEDA242471251A00378D27 /* MyAnnotationView.swift in Sources */,
 				0CDEDA0A24704C8300378D27 /* HomeViewController.swift in Sources */,
 				0CDEDA0624704C8300378D27 /* AppDelegate.swift in Sources */,
 				0CDEDA1C24704DC900378D27 /* LocationSearchTableVC.swift in Sources */,
