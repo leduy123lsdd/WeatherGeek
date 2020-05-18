@@ -10,40 +10,111 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class HomeViewController: UIViewController, CLLocationManagerDelegate {
+class HomeViewController: UIViewController {
     
-    @IBOutlet weak var mapView: MKMapView!
-    var resultSearchController: UISearchController? = nil
-    var selectedPin: MKPlacemark? = nil
-    var locManager = CLLocationManager()
+    @IBOutlet weak var placeLb: UILabel!
+    @IBOutlet weak var dateTimeLb: UILabel!
+    @IBOutlet weak var weatherSumLb: UILabel!
+    @IBOutlet weak var imageWeather: UIImageView!
+    @IBOutlet weak var degreeLb: UILabel!
+    @IBOutlet weak var feelLikeNumLb: UILabel!
+    @IBOutlet weak var cloudCoverNumLb: UILabel!
+    @IBOutlet weak var windSpeedNumLb: UILabel!
+    @IBOutlet weak var humidityNumLb: UILabel!
+    
+    
+    var searchAddressVC:SearchAddressVC! = nil
+    var detailView: DetaiForecastViewController! = nil
+    var settingView: SettingViewController! = nil
+    var getWeatherFacade:WeatherDataRequest?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        initView()
-    }
-    
-    private func initView(){
-        mapView.register(MyAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        searchAddressVC = storyboard!.instantiateViewController(identifier: "SearchAddressVC") as? SearchAddressVC
+        detailView = storyboard!.instantiateViewController(identifier: "DetaiForecastViewController") as? DetaiForecastViewController
+        settingView = storyboard!.instantiateViewController(identifier: "SettingViewController") as? SettingViewController
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.appDelegate = self
         
-        showCurrentLocationPin()
-        setUpSearchAddressResult()
-    }
-
-    //MARK: - Helper Functions
-    let regionRadius: CLLocationDistance = 1000
-    private func centerMapOnLocation(location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegion.init(center: location.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
-
-    //MARK: - Add an annotation
-    private func setupUI(location: CLLocation, locationName:String = "", city:String = ""){
-        let _annotation = MyAnnotation(title: "\(locationName)", locationName: "\(city)", discipline: "Me", coordinate: location.coordinate)
-        mapView.addAnnotation(_annotation)
+        if let currentLocation = getCurrentLocation() {
+            getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
+                self.updateUI(data: result)
+            }
+        }
     }
     
-    private func showCurrentLocationPin(){
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let currentLocation = getCurrentLocation() {
+            getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
+                self.updateUI(data: result)
+            }
+        }
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    @IBAction func searchBtnAction(_ sender: Any) {
+
+        self.navigationController?.pushViewController(searchAddressVC, animated: true)
+    }
+    
+    
+    @IBAction func detailAndForecastBtnAction(_ sender: Any) {
+        detailView.modalPresentationStyle = .formSheet
+        self.present(detailView, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func settingBtnAction(_ sender: Any) {
+        self.navigationController?.pushViewController(settingView, animated: true)
+    }
+    
+    //MARK: - services
+    private func getWeatherDataService(lat:Double,lon:Double,completion: @escaping((_ dataResponse: CurrentWeatherData)->Void)){
+        
+            self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
+            self.getWeatherFacade?.getCurrentWeatherData { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let weatherData):
+                    completion(weatherData)
+                }
+            }
+        
+    }
+    
+    private func updateUI(data:CurrentWeatherData) {
+        DispatchQueue.main.async {
+            guard let weather = data.getWeather() else {fatalError()}
+            guard let main = data.main else {fatalError()}
+            guard let wind = data.wind else {fatalError()}
+            guard let cloud = data.clouds else {fatalError()}
+            
+            let temp = Int((main.temp ?? 273.15) - 273.15)
+            let tempFeel = Int((main.feels_like ?? 273.15) - 273.15)
+            let windSpeed = Int((wind.speed ?? 0) * 2.237)
+                    
+            self.weatherSumLb.text = weather.description ?? "Failed to load data."
+            self.degreeLb.text = "\(temp)°"
+            self.cloudCoverNumLb.text = "\(cloud.all ?? 0) %"
+            self.feelLikeNumLb.text = "\(tempFeel)°"
+            self.windSpeedNumLb.text = "\(windSpeed) mph"
+            self.humidityNumLb.text = "\(Int(main.humidity ?? 0)) %"
+        }
+        
+        
+    }
+    
+    //MARK: - get current location
+    var locManager = CLLocationManager()
+    private func getCurrentLocation() -> CLLocationCoordinate2D? {
         locManager.requestWhenInUseAuthorization()
         var currentLocation: CLLocation?
 
@@ -55,49 +126,21 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
         }
         if let current = currentLocation {
             let coordinate = current.coordinate
-            let initialLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-                    
-            centerMapOnLocation(location: initialLocation)
-            setupUI(location: initialLocation)
+            
+            return coordinate
+            
+        } else {
+            return nil
         }
-    }
-    
-    private func setUpSearchAddressResult(){
-        // Setup search results table
-        let locationSearchTable = storyboard!.instantiateViewController(identifier: "LocationSearchTableVC") as! LocationSearchTableVC
-        locationSearchTable.handlerMapSearchDelegate = self
-        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
-        resultSearchController?.searchResultsUpdater = locationSearchTable as UISearchResultsUpdating
-        locationSearchTable.mapView = mapView
-        
-        let searchBar = resultSearchController!.searchBar
-        searchBar.sizeToFit()
-        searchBar.placeholder = "Search for places"
-        searchBar.setShowsCancelButton(true, animated: true)
-        navigationItem.titleView = resultSearchController?.searchBar
-        resultSearchController?.hidesNavigationBarDuringPresentation = false
-        definesPresentationContext = true
     }
 }
 
-
-extension HomeViewController: HandleMapSearch {
-    func dropPinZoomIn(placemark: MKPlacemark) {
-        selectedPin = placemark
-        mapView.removeAnnotations(mapView.annotations)
-        
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = placemark.coordinate
-        
-        if let city = placemark.locality, let state = placemark.administrativeArea, let name = placemark.name {
-            annotation.subtitle = "\(name), \(city) "
-            mapView.addAnnotation(annotation)
-            let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-            let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
-            let currentLocation = CLLocation(latitude: placemark.coordinate.latitude, longitude: placemark.coordinate.longitude)
-            centerMapOnLocation(location: currentLocation)
-            setupUI(location: currentLocation, locationName: name, city: city)
-            mapView.setRegion(region, animated: true)
+extension HomeViewController: AppDidWake {
+    func appBecomeActive() {
+        if let currentLocation = getCurrentLocation() {
+            getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
+                self.updateUI(data: result)
+            }
         }
     }
 }
