@@ -15,4 +15,7 @@ class ApiKey {
     static func getCurrentWeatherData_API(latitude: Double, longtitude: Double) -> String {
         return "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longtitude)&appid=\(ApiKey.API_KEY)"
     }
+    static func getIconAPI(iconName:String) -> String {
+        return "http://openweathermap.org/img/wn/\(iconName)@2x.png"
+    }
 }

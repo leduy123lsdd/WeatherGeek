@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import SDWebImage
 
 class HomeViewController: UIViewController {
     
@@ -23,10 +24,15 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var humidityNumLb: UILabel!
     
     
+    @IBOutlet weak var centerVerticalXImage: NSLayoutConstraint!
+    
+    
     var searchAddressVC:SearchAddressVC! = nil
     var detailView: DetaiForecastViewController! = nil
     var settingView: SettingViewController! = nil
+    
     var getWeatherFacade:WeatherDataRequest?
+    var getWeatherDataServiceResponse:CurrentWeatherData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,17 +46,34 @@ class HomeViewController: UIViewController {
         if let currentLocation = getCurrentLocation() {
             getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
                 self.updateUI(data: result)
+                self.getWeatherDataServiceResponse = result
             }
         }
+        
+//        DispatchQueue.main.async {
+//            var reverse = false
+//            while true {
+//                reverse = !reverse
+//                UIView.animate(withDuration: 0.4, animations: { [weak self] in
+//                    self?.centerVerticalXImage.constant = (reverse ? 10 : -10)
+//                }, completion: nil)            }
+//
+//
+//        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let currentLocation = getCurrentLocation() {
-            getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
-                self.updateUI(data: result)
+        if let data = getWeatherDataServiceResponse {
+            self.updateUI(data: data)
+        } else {
+            if let currentLocation = getCurrentLocation() {
+                getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
+                    self.updateUI(data: result)
+                }
             }
         }
+        
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
@@ -60,13 +83,20 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func searchBtnAction(_ sender: Any) {
-
+        self.searchAddressVC.getLocationPin = { location in
+            let coordinate = location.coordinate
+            self.getWeatherDataService(lat: coordinate.latitude, lon: coordinate.longitude) { (result) in
+                self.updateUI(data: result, location: location)
+                self.getWeatherDataServiceResponse = result
+            }
+        }
         self.navigationController?.pushViewController(searchAddressVC, animated: true)
     }
     
     
     @IBAction func detailAndForecastBtnAction(_ sender: Any) {
         detailView.modalPresentationStyle = .formSheet
+        
         self.present(detailView, animated: true, completion: nil)
     }
     
@@ -90,7 +120,7 @@ class HomeViewController: UIViewController {
         
     }
     
-    private func updateUI(data:CurrentWeatherData) {
+    private func updateUI(data:CurrentWeatherData, location:MKPlacemark? = nil) {
         DispatchQueue.main.async {
             guard let weather = data.getWeather() else {fatalError()}
             guard let main = data.main else {fatalError()}
@@ -100,6 +130,13 @@ class HomeViewController: UIViewController {
             let temp = Int((main.temp ?? 273.15) - 273.15)
             let tempFeel = Int((main.feels_like ?? 273.15) - 273.15)
             let windSpeed = Int((wind.speed ?? 0) * 2.237)
+            
+            self.weatherSumLb.fadeTransition(0.4)
+            self.degreeLb.fadeTransition(0.4)
+            self.cloudCoverNumLb.fadeTransition(0.4)
+            self.feelLikeNumLb.fadeTransition(0.4)
+            self.windSpeedNumLb.fadeTransition(0.4)
+            self.humidityNumLb.fadeTransition(0.4)
                     
             self.weatherSumLb.text = weather.description ?? "Failed to load data."
             self.degreeLb.text = "\(temp)°"
@@ -107,6 +144,17 @@ class HomeViewController: UIViewController {
             self.feelLikeNumLb.text = "\(tempFeel)°"
             self.windSpeedNumLb.text = "\(windSpeed) mph"
             self.humidityNumLb.text = "\(Int(main.humidity ?? 0)) %"
+            
+            if let url = URL(string: ApiKey.getIconAPI(iconName: weather.icon ?? "")) {
+                self.imageWeather.sd_setImage(with: url, completed: nil)
+            } else {
+                fatalError("Can't get icon url.")
+            }
+            
+            if let placemark = location, let city = placemark.locality, let nameCity = placemark.name {
+                self.placeLb.fadeTransition(0.4)
+                self.placeLb.text = "\(city), \(nameCity)"
+            }
         }
         
         
@@ -142,5 +190,16 @@ extension HomeViewController: AppDidWake {
                 self.updateUI(data: result)
             }
         }
+    }
+}
+
+extension UIView {
+    func fadeTransition(_ duration:CFTimeInterval) {
+        let animation = CATransition()
+        animation.timingFunction = CAMediaTimingFunction(name:
+            CAMediaTimingFunctionName.default)
+        animation.type = CATransitionType.moveIn
+        animation.duration = duration
+        layer.add(animation, forKey: CATransitionType.fade.rawValue)
     }
 }
