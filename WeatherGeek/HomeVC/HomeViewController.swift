@@ -17,28 +17,38 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var dateTimeLb: UILabel!
     @IBOutlet weak var weatherSumLb: UILabel!
     @IBOutlet weak var imageWeather: UIImageView!
-    @IBOutlet weak var degreeLb: UILabel!
-    @IBOutlet weak var feelLikeNumLb: UILabel!
-    @IBOutlet weak var cloudCoverNumLb: UILabel!
-    @IBOutlet weak var windSpeedNumLb: UILabel!
-    @IBOutlet weak var humidityNumLb: UILabel!
-    
-    
     @IBOutlet weak var centerVerticalXImage: NSLayoutConstraint!
     
-    
     var searchAddressVC:SearchAddressVC! = nil
-    var detailView: DetaiForecastViewController! = nil
     var settingView: SettingViewController! = nil
     
     var getWeatherFacade:WeatherDataRequest?
     var getWeatherDataServiceResponse:CurrentWeatherData?
     
+    // Slide variables
+    enum CardState {
+        case expanded
+        case collapsed
+    }
+    
+    var cardViewController:CardViewController!
+    var visualEffectView:UIVisualEffectView!
+    
+    let cardHeight:CGFloat = 600
+    let cardHandleAreaHeight:CGFloat = 150
+    
+    var cardVisible = false
+    var nextState:CardState {
+        return cardVisible ? .collapsed : .expanded
+    }
+    
+    var runningAnimations = [UIViewPropertyAnimator]()
+    var animationProgressWhenInterrupted:CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         searchAddressVC = storyboard!.instantiateViewController(identifier: "SearchAddressVC") as? SearchAddressVC
-        detailView = storyboard!.instantiateViewController(identifier: "DetaiForecastViewController") as? DetaiForecastViewController
         settingView = storyboard!.instantiateViewController(identifier: "SettingViewController") as? SettingViewController
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.appDelegate = self
@@ -49,17 +59,16 @@ class HomeViewController: UIViewController {
                 self.getWeatherDataServiceResponse = result
             }
         }
-        
-//        DispatchQueue.main.async {
-//            var reverse = false
-//            while true {
-//                reverse = !reverse
-//                UIView.animate(withDuration: 0.4, animations: { [weak self] in
-//                    self?.centerVerticalXImage.constant = (reverse ? 10 : -10)
-//                }, completion: nil)            }
-//
-//
-//        }
+        setupCard()
+    }
+    
+    func animateBackground() {
+        var reverse = false
+        UIView.animate(withDuration: 0.4, delay: 0.0, options: [.repeat, .curveLinear], animations: {
+            reverse = !reverse
+            self.centerVerticalXImage.constant = (reverse ? -10 : 10)
+        }, completion: nil)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,14 +102,6 @@ class HomeViewController: UIViewController {
         self.navigationController?.pushViewController(searchAddressVC, animated: true)
     }
     
-    
-    @IBAction func detailAndForecastBtnAction(_ sender: Any) {
-        detailView.modalPresentationStyle = .formSheet
-        
-        self.present(detailView, animated: true, completion: nil)
-    }
-    
-    
     @IBAction func settingBtnAction(_ sender: Any) {
         self.navigationController?.pushViewController(settingView, animated: true)
     }
@@ -122,29 +123,17 @@ class HomeViewController: UIViewController {
     
     private func updateUI(data:CurrentWeatherData, location:MKPlacemark? = nil) {
         DispatchQueue.main.async {
+            
             guard let weather = data.getWeather() else {fatalError()}
             guard let main = data.main else {fatalError()}
             guard let wind = data.wind else {fatalError()}
-            guard let cloud = data.clouds else {fatalError()}
             
-            let temp = Int((main.temp ?? 273.15) - 273.15)
-            let tempFeel = Int((main.feels_like ?? 273.15) - 273.15)
-            let windSpeed = Int((wind.speed ?? 0) * 2.237)
+            print(main.feels_like)
+            print(main.humidity)
             
             self.weatherSumLb.fadeTransition(0.4)
-            self.degreeLb.fadeTransition(0.4)
-            self.cloudCoverNumLb.fadeTransition(0.4)
-            self.feelLikeNumLb.fadeTransition(0.4)
-            self.windSpeedNumLb.fadeTransition(0.4)
-            self.humidityNumLb.fadeTransition(0.4)
-                    
             self.weatherSumLb.text = weather.description ?? "Failed to load data."
-            self.degreeLb.text = "\(temp)°"
-            self.cloudCoverNumLb.text = "\(cloud.all ?? 0) %"
-            self.feelLikeNumLb.text = "\(tempFeel)°"
-            self.windSpeedNumLb.text = "\(windSpeed) mph"
-            self.humidityNumLb.text = "\(Int(main.humidity ?? 0)) %"
-            
+            self.cardViewController.parseData(data: data)
             if let url = URL(string: ApiKey.getIconAPI(iconName: weather.icon ?? "")) {
                 self.imageWeather.sd_setImage(with: url, completed: nil)
             } else {
@@ -181,6 +170,36 @@ class HomeViewController: UIViewController {
             return nil
         }
     }
+    
+    //MARK: - set up card view
+    func setupCard() {
+        visualEffectView = UIVisualEffectView()
+        visualEffectView.frame = self.view.frame
+        self.view.addSubview(visualEffectView)
+        
+        cardViewController = CardViewController(nibName: "CardViewController", bundle: nil)
+        self.addChild(cardViewController)
+        self.view.addSubview(cardViewController.view)
+        
+        cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - cardHandleAreaHeight, width: self.view.bounds.width, height: cardHeight)
+        
+        cardViewController.view.clipsToBounds = true
+        
+        let tapGestureRezognizer = UITapGestureRecognizer(target: self, action: #selector(HomeViewController.handleCardTap(recognize:)))
+        let panGestureRezognizer = UIPanGestureRecognizer(target: self, action: #selector(HomeViewController.handleCardPan(recognize:)))
+        
+//        cardViewController.handleArea.addGestureRecognizer(tapGestureRezognizer)
+        cardViewController.view.addGestureRecognizer(panGestureRezognizer)
+        
+        self.visualEffectView.isUserInteractionEnabled = false
+        
+        cardViewController.view.layer.masksToBounds = false
+        cardViewController.view.layer.shadowColor = UIColor.black.cgColor
+        cardViewController.view.layer.shadowOpacity = 0.2
+        cardViewController.view.layer.shadowOffset = .zero
+        cardViewController.view.layer.shadowRadius = 3
+        
+    }
 }
 
 extension HomeViewController: AppDidWake {
@@ -201,5 +220,98 @@ extension UIView {
         animation.type = CATransitionType.moveIn
         animation.duration = duration
         layer.add(animation, forKey: CATransitionType.fade.rawValue)
+    }
+}
+
+
+//MARK: - set up slide view
+extension HomeViewController {
+    @objc
+    func handleCardTap(recognize: UITapGestureRecognizer) {
+        
+    }
+    
+    @objc
+    func handleCardPan(recognize: UIPanGestureRecognizer) {
+        switch recognize.state {
+        case .began:
+            // startTransition
+            startInteractiveTransition(state: nextState, duration: 0.9)
+        case .changed:
+            // updateTransistion
+            let translation = recognize.translation(in: self.cardViewController.view)
+            var fractionComplete = translation.y/cardHeight
+            fractionComplete = cardVisible ? fractionComplete : -fractionComplete
+            
+            updateInteractiveTransition(fractionCompleted: fractionComplete)
+        case .ended:
+            continueInteractiveTransition()
+        default:
+            break
+        }
+    }
+    
+    func animateTransitionIfNeeded(state: CardState, duration: TimeInterval) {
+        if runningAnimations.isEmpty {
+            let frameAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+                switch state {
+                case .expanded:
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHeight
+                case .collapsed:
+                    self.cardViewController.view.frame.origin.y = self.view.frame.height - self.cardHandleAreaHeight
+                }
+            }
+            frameAnimator.addCompletion { _ in
+                self.cardVisible = !self.cardVisible
+                self.runningAnimations.removeAll()
+            }
+            frameAnimator.startAnimation()
+            runningAnimations.append(frameAnimator)
+            let cornerRadiusAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear) {
+                switch state {
+                case .expanded:
+                    self.cardViewController.view.layer.cornerRadius = 12
+                case .collapsed:
+                    self.cardViewController.view.layer.cornerRadius = 0
+                }
+            }
+            cornerRadiusAnimator.startAnimation()
+            runningAnimations.append(cornerRadiusAnimator)
+            
+            let blurAnimator = UIViewPropertyAnimator(duration: duration, dampingRatio: 1) {
+                switch state {
+                case .expanded:
+                    self.visualEffectView.effect = UIBlurEffect(style: .dark)
+                case .collapsed:
+                    self.visualEffectView.effect = nil
+                }
+            }
+            blurAnimator.startAnimation()
+            
+            runningAnimations.append(blurAnimator)
+        }
+    }
+    
+    func startInteractiveTransition(state: CardState, duration:TimeInterval ) {
+        if runningAnimations.isEmpty {
+            // run animations
+            animateTransitionIfNeeded(state: state, duration: duration)
+        }
+        for animator in runningAnimations {
+            animator.pauseAnimation()
+            animationProgressWhenInterrupted = animator.fractionComplete
+        }
+    }
+    
+    func updateInteractiveTransition(fractionCompleted:CGFloat) {
+        for animator in runningAnimations {
+            animator.fractionComplete = fractionCompleted + animationProgressWhenInterrupted
+        }
+    }
+    
+    func continueInteractiveTransition() {
+        for animator in runningAnimations {
+            animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
+        }
     }
 }

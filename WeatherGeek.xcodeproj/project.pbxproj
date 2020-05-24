@@ -3,15 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C317698247255A8001CC29C /* DetaiForecastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C317697247255A8001CC29C /* DetaiForecastViewController.swift */; };
 		0C31769A247255B2001CC29C /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C317699247255B2001CC29C /* SettingViewController.swift */; };
 		0C31769C2472B10A001CC29C /* ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C31769B2472B10A001CC29C /* ApiKey.swift */; };
 		0C31769F2472B3F2001CC29C /* CurrentWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C31769E2472B3F2001CC29C /* CurrentWeatherData.swift */; };
 		0C3176A22472B683001CC29C /* WeatherDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3176A12472B683001CC29C /* WeatherDataRequest.swift */; };
+		0C3CAA54247AC5C500560996 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3CAA52247AC5C500560996 /* CardViewController.swift */; };
+		0C3CAA55247AC5C500560996 /* CardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C3CAA53247AC5C500560996 /* CardViewController.xib */; };
+		0C6BCEA024762D8C0084DF3D /* HourForcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6BCE9E24762D8C0084DF3D /* HourForcastCell.swift */; };
+		0C6BCEA124762D8C0084DF3D /* HourForcastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C6BCE9F24762D8C0084DF3D /* HourForcastCell.xib */; };
+		0C6BCEA5247630DA0084DF3D /* WeekForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6BCEA3247630DA0084DF3D /* WeekForecastCell.swift */; };
+		0C6BCEA6247630DA0084DF3D /* WeekForecastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C6BCEA4247630DA0084DF3D /* WeekForecastCell.xib */; };
 		0CDEDA0624704C8300378D27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDEDA0524704C8300378D27 /* AppDelegate.swift */; };
 		0CDEDA0824704C8300378D27 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDEDA0724704C8300378D27 /* SceneDelegate.swift */; };
 		0CDEDA0A24704C8300378D27 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDEDA0924704C8300378D27 /* HomeViewController.swift */; };
@@ -27,11 +32,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0C317697247255A8001CC29C /* DetaiForecastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetaiForecastViewController.swift; sourceTree = "<group>"; };
 		0C317699247255B2001CC29C /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		0C31769B2472B10A001CC29C /* ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiKey.swift; sourceTree = "<group>"; };
 		0C31769E2472B3F2001CC29C /* CurrentWeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherData.swift; sourceTree = "<group>"; };
 		0C3176A12472B683001CC29C /* WeatherDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataRequest.swift; sourceTree = "<group>"; };
+		0C3CAA52247AC5C500560996 /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
+		0C3CAA53247AC5C500560996 /* CardViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardViewController.xib; sourceTree = "<group>"; };
+		0C6BCE9E24762D8C0084DF3D /* HourForcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourForcastCell.swift; sourceTree = "<group>"; };
+		0C6BCE9F24762D8C0084DF3D /* HourForcastCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HourForcastCell.xib; sourceTree = "<group>"; };
+		0C6BCEA3247630DA0084DF3D /* WeekForecastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekForecastCell.swift; sourceTree = "<group>"; };
+		0C6BCEA4247630DA0084DF3D /* WeekForecastCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeekForecastCell.xib; sourceTree = "<group>"; };
 		0CDEDA0224704C8300378D27 /* WeatherGeek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherGeek.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CDEDA0524704C8300378D27 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0CDEDA0724704C8300378D27 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,7 +84,10 @@
 		0C3176962472558B001CC29C /* Detai and Forecast View */ = {
 			isa = PBXGroup;
 			children = (
-				0C317697247255A8001CC29C /* DetaiForecastViewController.swift */,
+				0C6BCEA2247630BA0084DF3D /* tableview Cell */,
+				0C6BCE9D24762D110084DF3D /* Collection view cell */,
+				0C3CAA52247AC5C500560996 /* CardViewController.swift */,
+				0C3CAA53247AC5C500560996 /* CardViewController.xib */,
 			);
 			path = "Detai and Forecast View";
 			sourceTree = "<group>";
@@ -93,6 +106,24 @@
 				0C3176A12472B683001CC29C /* WeatherDataRequest.swift */,
 			);
 			path = "Data Request";
+			sourceTree = "<group>";
+		};
+		0C6BCE9D24762D110084DF3D /* Collection view cell */ = {
+			isa = PBXGroup;
+			children = (
+				0C6BCE9E24762D8C0084DF3D /* HourForcastCell.swift */,
+				0C6BCE9F24762D8C0084DF3D /* HourForcastCell.xib */,
+			);
+			path = "Collection view cell";
+			sourceTree = "<group>";
+		};
+		0C6BCEA2247630BA0084DF3D /* tableview Cell */ = {
+			isa = PBXGroup;
+			children = (
+				0C6BCEA3247630DA0084DF3D /* WeekForecastCell.swift */,
+				0C6BCEA4247630DA0084DF3D /* WeekForecastCell.xib */,
+			);
+			path = "tableview Cell";
 			sourceTree = "<group>";
 		};
 		0CDED9F924704C8300378D27 = {
@@ -191,7 +222,6 @@
 				77666CE5248F7C50E71A3CC2 /* Pods-WeatherGeek.debug.xcconfig */,
 				74E25525A04D4ABA45338A3B /* Pods-WeatherGeek.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -255,6 +285,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C6BCEA6247630DA0084DF3D /* WeekForecastCell.xib in Resources */,
+				0C6BCEA124762D8C0084DF3D /* HourForcastCell.xib in Resources */,
+				0C3CAA55247AC5C500560996 /* CardViewController.xib in Resources */,
 				0CDEDA1224704C8700378D27 /* LaunchScreen.storyboard in Resources */,
 				0CDEDA0F24704C8700378D27 /* Assets.xcassets in Resources */,
 				0CDEDA0D24704C8300378D27 /* Main.storyboard in Resources */,
@@ -311,11 +344,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C31769C2472B10A001CC29C /* ApiKey.swift in Sources */,
+				0C6BCEA024762D8C0084DF3D /* HourForcastCell.swift in Sources */,
 				0CDEDA1F24704E8500378D27 /* MyAnnotation.swift in Sources */,
 				0CDEDA28247237E600378D27 /* SearchAddressVC.swift in Sources */,
+				0C6BCEA5247630DA0084DF3D /* WeekForecastCell.swift in Sources */,
 				0CDEDA242471251A00378D27 /* MyAnnotationView.swift in Sources */,
-				0C317698247255A8001CC29C /* DetaiForecastViewController.swift in Sources */,
 				0CDEDA0A24704C8300378D27 /* HomeViewController.swift in Sources */,
+				0C3CAA54247AC5C500560996 /* CardViewController.swift in Sources */,
 				0C3176A22472B683001CC29C /* WeatherDataRequest.swift in Sources */,
 				0C31769A247255B2001CC29C /* SettingViewController.swift in Sources */,
 				0CDEDA0624704C8300378D27 /* AppDelegate.swift in Sources */,

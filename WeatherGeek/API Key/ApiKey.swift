@@ -16,6 +16,6 @@ class ApiKey {
         return "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longtitude)&appid=\(ApiKey.API_KEY)"
     }
     static func getIconAPI(iconName:String) -> String {
-        return "http://openweathermap.org/img/wn/\(iconName)@2x.png"
+        return "https://openweathermap.org/img/wn/\(iconName)@2x.png"
     }
 }

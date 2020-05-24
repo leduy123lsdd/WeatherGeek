@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="HourForcastCell" customModule="WeatherGeek" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="128"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="100" height="128"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PMB-Wu-9ow">
+                        <rect key="frame" x="5" y="5" width="90" height="118"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eej-1n-LAX">
+                                <rect key="frame" x="40.5" y="5" width="9" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T7a-NI-vjw">
+                                <rect key="frame" x="33" y="89" width="34.5" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icons8-sun-500" translatesAutoresizingMaskIntoConstraints="NO" id="hqh-4D-eWh">
+                                <rect key="frame" x="20" y="34" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="b3F-pr-b6W"/>
+                                    <constraint firstAttribute="width" constant="50" id="n8K-Ys-0DM"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="T7a-NI-vjw" firstAttribute="centerX" secondItem="PMB-Wu-9ow" secondAttribute="centerX" constant="5" id="4qu-Cb-ba1"/>
+                            <constraint firstItem="hqh-4D-eWh" firstAttribute="top" secondItem="eej-1n-LAX" secondAttribute="bottom" constant="5" id="9hG-2c-KEe"/>
+                            <constraint firstItem="hqh-4D-eWh" firstAttribute="centerY" secondItem="PMB-Wu-9ow" secondAttribute="centerY" id="OvJ-7W-tqw"/>
+                            <constraint firstItem="hqh-4D-eWh" firstAttribute="centerX" secondItem="PMB-Wu-9ow" secondAttribute="centerX" id="RX3-Bc-8nQ"/>
+                            <constraint firstItem="eej-1n-LAX" firstAttribute="centerX" secondItem="PMB-Wu-9ow" secondAttribute="centerX" id="RgU-9u-zg9"/>
+                            <constraint firstItem="T7a-NI-vjw" firstAttribute="top" secondItem="hqh-4D-eWh" secondAttribute="bottom" constant="5" id="hJp-UU-qGz"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="PMB-Wu-9ow" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="LT5-OA-rJ0"/>
+                <constraint firstAttribute="trailing" secondItem="PMB-Wu-9ow" secondAttribute="trailing" constant="5" id="WDi-2r-xdw"/>
+                <constraint firstAttribute="bottom" secondItem="PMB-Wu-9ow" secondAttribute="bottom" constant="5" id="dEa-he-oia"/>
+                <constraint firstItem="PMB-Wu-9ow" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="i5J-dL-zJG"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <size key="customSize" width="359" height="215"/>
+            <point key="canvasLocation" x="350" y="161"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="icons8-sun-500" width="500" height="500"/>
+    </resources>
+</document>

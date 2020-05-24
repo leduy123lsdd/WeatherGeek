@@ -20,6 +20,9 @@ class CurrentWeatherData: Decodable {
         }
         return nil
     }
+    
+    var current:Current?
+    var daily:[Daily]?
 }
 
 class Weather: Decodable {
@@ -39,4 +42,19 @@ class Wind: Decodable {
 
 class Cloud: Decodable {
     var all:Int?
+}
+
+
+class Current: Decodable {
+    var dt:Int?
+    var temp:Double?
+}
+
+class Daily:Decodable {
+    var dt:Int?
+    var temp:Temp?
+}
+
+class Temp:Decodable {
+    var day:Double?
 }
