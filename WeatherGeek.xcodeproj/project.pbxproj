@@ -13,6 +13,7 @@
 		0C3176A22472B683001CC29C /* WeatherDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3176A12472B683001CC29C /* WeatherDataRequest.swift */; };
 		0C3CAA54247AC5C500560996 /* CardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3CAA52247AC5C500560996 /* CardViewController.swift */; };
 		0C3CAA55247AC5C500560996 /* CardViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C3CAA53247AC5C500560996 /* CardViewController.xib */; };
+		0C4AE8B9247D082700518259 /* Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4AE8B8247D082700518259 /* Extention.swift */; };
 		0C6BCEA024762D8C0084DF3D /* HourForcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6BCE9E24762D8C0084DF3D /* HourForcastCell.swift */; };
 		0C6BCEA124762D8C0084DF3D /* HourForcastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0C6BCE9F24762D8C0084DF3D /* HourForcastCell.xib */; };
 		0C6BCEA5247630DA0084DF3D /* WeekForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6BCEA3247630DA0084DF3D /* WeekForecastCell.swift */; };
@@ -38,6 +39,7 @@
 		0C3176A12472B683001CC29C /* WeatherDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDataRequest.swift; sourceTree = "<group>"; };
 		0C3CAA52247AC5C500560996 /* CardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewController.swift; sourceTree = "<group>"; };
 		0C3CAA53247AC5C500560996 /* CardViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CardViewController.xib; sourceTree = "<group>"; };
+		0C4AE8B8247D082700518259 /* Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extention.swift; sourceTree = "<group>"; };
 		0C6BCE9E24762D8C0084DF3D /* HourForcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourForcastCell.swift; sourceTree = "<group>"; };
 		0C6BCE9F24762D8C0084DF3D /* HourForcastCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HourForcastCell.xib; sourceTree = "<group>"; };
 		0C6BCEA3247630DA0084DF3D /* WeekForecastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekForecastCell.swift; sourceTree = "<group>"; };
@@ -108,6 +110,14 @@
 			path = "Data Request";
 			sourceTree = "<group>";
 		};
+		0C4AE8B7247D081100518259 /* Extention */ = {
+			isa = PBXGroup;
+			children = (
+				0C4AE8B8247D082700518259 /* Extention.swift */,
+			);
+			path = Extention;
+			sourceTree = "<group>";
+		};
 		0C6BCE9D24762D110084DF3D /* Collection view cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +157,7 @@
 		0CDEDA0424704C8300378D27 /* WeatherGeek */ = {
 			isa = PBXGroup;
 			children = (
+				0C4AE8B7247D081100518259 /* Extention */,
 				0C3176A02472B601001CC29C /* Data Request */,
 				0C31769D2472B3DC001CC29C /* Data Model */,
 				0CDEDA25247145FB00378D27 /* API Key */,
@@ -347,6 +358,7 @@
 				0C6BCEA024762D8C0084DF3D /* HourForcastCell.swift in Sources */,
 				0CDEDA1F24704E8500378D27 /* MyAnnotation.swift in Sources */,
 				0CDEDA28247237E600378D27 /* SearchAddressVC.swift in Sources */,
+				0C4AE8B9247D082700518259 /* Extention.swift in Sources */,
 				0C6BCEA5247630DA0084DF3D /* WeekForecastCell.swift in Sources */,
 				0CDEDA242471251A00378D27 /* MyAnnotationView.swift in Sources */,
 				0CDEDA0A24704C8300378D27 /* HomeViewController.swift in Sources */,

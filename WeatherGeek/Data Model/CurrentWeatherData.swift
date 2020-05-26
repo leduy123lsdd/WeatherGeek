@@ -22,11 +22,12 @@ class CurrentWeatherData: Decodable {
     }
     
     var current:Current?
-    var daily:[Daily]?
+    var hourly:[Current]?
 }
 
 class Weather: Decodable {
     var icon:String?
+    var id:Int?
     var description:String?
 }
 
@@ -46,13 +47,22 @@ class Cloud: Decodable {
 
 
 class Current: Decodable {
-    var dt:Int?
+    var dt:Double?
     var temp:Double?
-}
+    var weather:[Weather]?
+    
+    func getHour() -> String {
+        if let dt = self.dt {
+            let date = NSDate(timeIntervalSince1970: dt)
+            let dayTimePeriodFormatter = DateFormatter()
+            dayTimePeriodFormatter.dateFormat = "hh"
 
-class Daily:Decodable {
-    var dt:Int?
-    var temp:Temp?
+            let dateString = dayTimePeriodFormatter.string(from: date as Date)
+            return dateString
+        } else {
+            return ""
+        }
+    }
 }
 
 class Temp:Decodable {

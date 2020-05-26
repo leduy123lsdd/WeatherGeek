@@ -19,6 +19,8 @@ class CardViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     
+    var hourlyWeather = [Current]()
+    var current:Current?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,41 +38,54 @@ class CardViewController: UIViewController {
     
     func parseData(data:CurrentWeatherData){
         DispatchQueue.main.async {
-                    guard let weather = data.getWeather() else {fatalError()}
-                    guard let main = data.main else {fatalError()}
-                    guard let wind = data.wind else {fatalError()}
-                    guard let cloud = data.clouds else {fatalError()}
-                    
-                    let temp = Int((main.temp ?? 273.15) - 273.15)
-                    let tempFeel = Int((main.feels_like ?? 273.15) - 273.15)
-                    let windSpeed = Int((wind.speed ?? 0) * 2.237)
-                    
-                    
-                    self.degreeLb.fadeTransition(0.4)
-                    self.cloudCoverNumLb.fadeTransition(0.4)
-                    self.feelLikeNumLb.fadeTransition(0.4)
-                    self.windSpeedNumLb.fadeTransition(0.4)
-                    self.humidityNumLb.fadeTransition(0.4)
-                    
-                    self.degreeLb.text = "\(temp)°"
-                    self.cloudCoverNumLb.text = "\(cloud.all ?? 0) %"
-                    self.feelLikeNumLb.text = "\(tempFeel)°"
-                    self.windSpeedNumLb.text = "\(windSpeed) mph"
-                    self.humidityNumLb.text = "\(Int(main.humidity ?? 0)) %"
-                    
-                }
+            guard let main = data.main else {fatalError()}
+            guard let wind = data.wind else {fatalError()}
+            guard let cloud = data.clouds else {fatalError()}
+            
+            let temp = Int((main.temp ?? 273.15) - 273.15)
+            let tempFeel = Int((main.feels_like ?? 273.15) - 273.15)
+            let windSpeed = Int((wind.speed ?? 0) * 2.237)
+            
+            self.degreeLb.text = "\(temp)°"
+            self.cloudCoverNumLb.text = "\(cloud.all ?? 0) %"
+            self.feelLikeNumLb.text = "\(tempFeel)°"
+            self.windSpeedNumLb.text = "\(windSpeed) mph"
+            self.humidityNumLb.text = "\(Int(main.humidity ?? 0)) %"
+            
+        }
     }
-
+    
+    func parseForecast(data: CurrentWeatherData) {
+        DispatchQueue.main.async {
+            if let hourlyData = data.hourly {
+                self.hourlyWeather = hourlyData
+            }
+            if let current = data.current {
+                self.current = current
+            }
+            self.collectionView.reloadData()
+        }
+    }
 }
 
 extension CardViewController: UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        5
+        return hourlyWeather.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourForcastCell", for: indexPath) as! HourForcastCell
+        let data = self.hourlyWeather[indexPath.row]
+        let temp = Int((data.temp ?? 273.15) - 273.15)
+        if indexPath.row == 0 {
+            cell.updateUI(label: "Now" , icon: data.weather?.first?.icon ?? "", temp: "\(temp)°")
+        } else {
+            cell.updateUI(label: data.getHour()+"h" , icon: data.weather?.first?.icon ?? "", temp: "\(temp)°")
+        }
+        
         return cell
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

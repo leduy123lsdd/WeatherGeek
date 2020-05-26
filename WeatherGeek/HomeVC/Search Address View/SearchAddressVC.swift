@@ -17,8 +17,7 @@ class SearchAddressVC: UIViewController, CLLocationManagerDelegate {
     var selectedPin: MKPlacemark? = nil
     var locManager = CLLocationManager()
     
-    var getLocationPin :((_ location:MKPlacemark)->Void)?
-
+    var searchAddVCDelegate:PutBackNewLocation?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -101,11 +100,12 @@ extension SearchAddressVC: HandleMapSearch {
             setupUI(location: currentLocation, locationName: name, city: city)
             mapView.setRegion(region, animated: true)
         }
-        
-        if let getLocation = getLocationPin {
-            getLocation(placemark)
-        }
+        searchAddVCDelegate?.newLocation(location: placemark)
         
         self.navigationController?.popViewController(animated: true)
     }
+}
+
+protocol PutBackNewLocation {
+    func newLocation(location:MKPlacemark)
 }

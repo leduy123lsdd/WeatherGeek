@@ -58,6 +58,11 @@
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="359" height="215"/>
+            <connections>
+                <outlet property="hourLb" destination="eej-1n-LAX" id="Guz-je-cEB"/>
+                <outlet property="iconIm" destination="hqh-4D-eWh" id="u6R-2n-TZ0"/>
+                <outlet property="temperatureLb" destination="T7a-NI-vjw" id="HgG-Tj-LoP"/>
+            </connections>
             <point key="canvasLocation" x="350" y="161"/>
         </collectionViewCell>
     </objects>

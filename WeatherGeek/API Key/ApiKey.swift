@@ -18,4 +18,9 @@ class ApiKey {
     static func getIconAPI(iconName:String) -> String {
         return "https://openweathermap.org/img/wn/\(iconName)@2x.png"
     }
+    static func getHourlyWeather(latitude: Double, longtitude: Double) -> String {
+        let api = "https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longtitude)&exclude=minutely,daily&appid=\(ApiKey.API_KEY)"
+        print(api)
+        return api
+    }
 }
