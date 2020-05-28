@@ -25,6 +25,7 @@ class HomeViewController: UIViewController {
     var getWeatherFacade:WeatherDataRequest?
     var getWeatherDataServiceResponse:CurrentWeatherData?
     var getHourlyDataServiceResponde:CurrentWeatherData?
+    var getWeekWeatherDataService:CurrentWeatherData?
     
     // Slide variables
     enum CardState {
@@ -57,8 +58,6 @@ class HomeViewController: UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.appDelegate = self
         
-        
-        
         if let currentLocation = getCurrentLocation() {
             getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
                 self.updateUI(data: result)
@@ -69,7 +68,13 @@ class HomeViewController: UIViewController {
                 self.getHourlyDataServiceResponde = data
                 self.updateUICardView(dataHourlyForecast: data)
             }
+            self.getWeekWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (data) in
+                self.getWeatherDataServiceResponse = data
+                self.updateUICardView(dataWeekForecast: data)
+            }
         }
+        
+        
         
     }
     
@@ -84,7 +89,22 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        if getWeatherDataServiceResponse == nil {
+            if let currentLocation = getCurrentLocation() {
+                getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
+                    self.updateUI(data: result)
+                    self.updateUICardView(data: result)
+                }
+                self.getHourlyWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (data) in
+                    self.getHourlyDataServiceResponde = data
+                    self.updateUICardView(dataHourlyForecast: data)
+                }
+                self.getWeekWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (data) in
+                    self.getWeatherDataServiceResponse = data
+                    self.updateUICardView(dataWeekForecast: data)
+                }
+            }
+        }
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
@@ -116,9 +136,23 @@ class HomeViewController: UIViewController {
         
     }
     
-    private func getHourlyWeatherDataService(lat:Double,lon:Double,completion: @escaping((_ dataResponse: CurrentWeatherData)->Void)){
+    private func getHourlyWeatherDataService(lat:Double,lon:Double,completion: @escaping((_ dataResponse: CurrentWeatherData)->Void)) {
         self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
         self.getWeatherFacade?.getHourlyWeatherData { [weak self] result in
+            
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let weatherData):
+                completion(weatherData)
+            }
+        }
+        
+    }
+    
+    private func getWeekWeatherDataService(lat:Double,lon:Double,completion: @escaping((_ dataResponse: CurrentWeatherData)->Void)) {
+        self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
+        self.getWeatherFacade?.getWeekWeather { [weak self] result in
             
             switch result {
             case .failure(let error):
@@ -166,12 +200,15 @@ class HomeViewController: UIViewController {
         
     }
     
-    private func updateUICardView(data:CurrentWeatherData? = nil, dataHourlyForecast:CurrentWeatherData? = nil) {
+    private func updateUICardView(data:CurrentWeatherData? = nil, dataHourlyForecast:CurrentWeatherData? = nil, dataWeekForecast:CurrentWeatherData? = nil) {
         if let data = data {
             self.cardViewController.parseData(data: data)
         }
         if let data2 = dataHourlyForecast {
             self.cardViewController.parseForecast(data: data2)
+        }
+        if let data3 = dataWeekForecast {
+            self.cardViewController.parseWeekForecast(data: data3)
         }
     }
     
@@ -233,10 +270,15 @@ extension HomeViewController: AppDidWake {
             getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
                 self.updateUI(data: result)
                 self.updateUICardView(data: result)
+                self.getWeatherDataServiceResponse = result
             }
             self.getHourlyWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (data) in
                 self.getHourlyDataServiceResponde = data
                 self.updateUICardView(dataHourlyForecast: data)
+            }
+            self.getWeekWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (data) in
+                self.getWeatherDataServiceResponse = data
+                self.updateUICardView(dataWeekForecast: data)
             }
         }
     }
@@ -349,6 +391,10 @@ extension HomeViewController: PutBackNewLocation {
         self.getHourlyWeatherDataService(lat: coordinate.latitude, lon: coordinate.longitude) { (data) in
             self.getHourlyDataServiceResponde = data
             self.updateUICardView(dataHourlyForecast: data)
+        }
+        self.getWeekWeatherDataService(lat: coordinate.latitude, lon: coordinate.longitude) { (data) in
+            self.getWeatherDataServiceResponse = data
+            self.updateUICardView(dataWeekForecast: data)
         }
     }
 }

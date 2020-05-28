@@ -19,8 +19,11 @@ class ApiKey {
         return "https://openweathermap.org/img/wn/\(iconName)@2x.png"
     }
     static func getHourlyWeather(latitude: Double, longtitude: Double) -> String {
-        let api = "https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longtitude)&exclude=minutely,daily&appid=\(ApiKey.API_KEY)"
-        print(api)
+        let api = "https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longtitude)&exclude=minutely&appid=\(ApiKey.API_KEY)"
+        return api
+    }
+    static func getWeekWeather(latitude: Double, longtitude: Double) -> String {
+        let api = "https://api.openweathermap.org/data/2.5/onecall?lat=\(latitude)&lon=\(longtitude)&exclude=minutely,hourly&appid=\(ApiKey.API_KEY)"
         return api
     }
 }

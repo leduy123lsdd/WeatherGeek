@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CardViewController: UIViewController {
 
@@ -66,6 +67,15 @@ class CardViewController: UIViewController {
             self.collectionView.reloadData()
         }
     }
+    var dailyForcast = [Daily]()
+    func parseWeekForecast(data: CurrentWeatherData) {
+        DispatchQueue.main.async {
+            if let daily = data.daily {
+                self.dailyForcast = daily
+                self.tableView.reloadData()
+            }
+        }
+    }
 }
 
 extension CardViewController: UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
@@ -80,8 +90,12 @@ extension CardViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let temp = Int((data.temp ?? 273.15) - 273.15)
         if indexPath.row == 0 {
             cell.updateUI(label: "Now" , icon: data.weather?.first?.icon ?? "", temp: "\(temp)°")
+            cell.temperatureLb.font = UIFont.boldSystemFont(ofSize: 24.0)
+            cell.hourLb.font = UIFont.boldSystemFont(ofSize: 24.0)
         } else {
             cell.updateUI(label: data.getHour()+"h" , icon: data.weather?.first?.icon ?? "", temp: "\(temp)°")
+            cell.temperatureLb.font = UIFont.boldSystemFont(ofSize: 20.0)
+            cell.hourLb.font = UIFont.boldSystemFont(ofSize: 20.0)
         }
         
         return cell
@@ -89,19 +103,33 @@ extension CardViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 70, height: 110)
+        return CGSize(width: 70, height: 128)
     }
 }
 
 extension CardViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return dailyForcast.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "WeekForecastCell", for: indexPath) as! WeekForecastCell
+        let data = dailyForcast[indexPath.row]
+        let iconName = data.weather?.first?.icon ?? ""
+        
+        let dayName = data.getDayOfWeek()
+        let temp = Int((data.temp?.day ?? 273.15) - 273.15)
+        
+        cell.dayNameLb.text = indexPath.row == 0 ? "Today" : dayName
+        cell.dayNameLb.font = UIFont.boldSystemFont(ofSize: indexPath.row == 0 ? 24.0 : 20)
+        cell.tempLb.text = "\(temp)°"
+        
+        if let url = URL(string: ApiKey.getIconAPI(iconName: iconName)) {
+            cell.iconIm.sd_setImage(with: url, completed: nil)
+        } else {
+            fatalError("Can't get icon url.")
+        }
+        
         return cell
     }
-    
-    
 }

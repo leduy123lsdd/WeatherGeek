@@ -74,4 +74,27 @@ struct WeatherDataRequest {
         }
         dataTask.resume()
     }
+    mutating func getWeekWeather(completion: @escaping(Result<CurrentWeatherData, WeatherDataError>) -> Void){
+        
+        let resourceString = ApiKey.getWeekWeather(latitude: self.lat ?? 0.0, longtitude: self.lon ?? 0.0)
+        guard let resourceURL = URL(string: resourceString) else {
+            fatalError()
+        }
+        let dataTask = URLSession.shared.dataTask(with: resourceURL) { (data, _, _) in
+            guard let jsonData = data else {
+                completion(.failure(.noDataAvailable))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let holidaysResponse = try decoder.decode(CurrentWeatherData.self, from: jsonData)
+                completion(.success(holidaysResponse))
+            } catch let err {
+                print(err)
+                completion(.failure(.canNotProcessData))
+            }
+        }
+        dataTask.resume()
+    }
 }

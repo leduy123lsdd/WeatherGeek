@@ -9,7 +9,10 @@
 import UIKit
 
 class WeekForecastCell: UITableViewCell {
-
+    @IBOutlet weak var iconIm: UIImageView!
+    @IBOutlet weak var dayNameLb: UILabel!
+    @IBOutlet weak var tempLb: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

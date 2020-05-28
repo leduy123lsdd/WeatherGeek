@@ -20,22 +20,22 @@
                         <rect key="frame" x="5" y="5" width="90" height="118"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eej-1n-LAX">
-                                <rect key="frame" x="40.5" y="5" width="9" height="24"/>
+                                <rect key="frame" x="40.5" y="-5" width="9" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T7a-NI-vjw">
-                                <rect key="frame" x="33" y="89" width="34.5" height="24"/>
+                                <rect key="frame" x="33" y="99" width="34.5" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icons8-sun-500" translatesAutoresizingMaskIntoConstraints="NO" id="hqh-4D-eWh">
-                                <rect key="frame" x="20" y="34" width="50" height="50"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hqh-4D-eWh">
+                                <rect key="frame" x="10" y="24" width="70" height="70"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="b3F-pr-b6W"/>
-                                    <constraint firstAttribute="width" constant="50" id="n8K-Ys-0DM"/>
+                                    <constraint firstAttribute="height" constant="70" id="b3F-pr-b6W"/>
+                                    <constraint firstAttribute="width" constant="70" id="n8K-Ys-0DM"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -66,7 +66,4 @@
             <point key="canvasLocation" x="350" y="161"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="icons8-sun-500" width="500" height="500"/>
-    </resources>
 </document>

@@ -23,6 +23,8 @@ class CurrentWeatherData: Decodable {
     
     var current:Current?
     var hourly:[Current]?
+    
+    var daily:[Daily]?
 }
 
 class Weather: Decodable {
@@ -59,12 +61,61 @@ class Current: Decodable {
 
             let dateString = dayTimePeriodFormatter.string(from: date as Date)
             return dateString
-        } else {
-            return ""
         }
+        return ""
     }
+    
+    
 }
 
 class Temp:Decodable {
     var day:Double?
 }
+
+class Daily:Decodable {
+    var dt:Double?
+    var temp:Temp?
+    var weather:[Weather]?
+    
+    
+    func getDayOfWeek() -> String {
+        var today = ""
+        
+        if let dt = self.dt {
+            let date = NSDate(timeIntervalSince1970: dt)
+            let dayTimePeriodFormatter = DateFormatter()
+            dayTimePeriodFormatter.dateFormat = "yyyy-MM-dd"
+
+            let dateString = dayTimePeriodFormatter.string(from: date as Date)
+            today = dateString
+        } else {
+            return ""
+        }
+        
+        let formatter  = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        guard let todayDate = formatter.date(from: today) else { fatalError("\nCan't get today date") }
+        let myCalendar = Calendar(identifier: .gregorian)
+        let weekDay = myCalendar.component(.weekday, from: todayDate)
+        
+        switch weekDay {
+        case 1:
+            return "Sunday"
+        case 2:
+            return "Monday"
+        case 3:
+            return "Tuesday"
+        case 4:
+            return "Wednesday"
+        case 5:
+            return "Thursday"
+        case 6:
+            return "Friday"
+        case 7:
+            return "Saturday"
+        default:
+            return ""
+        }
+    }
+}
+
