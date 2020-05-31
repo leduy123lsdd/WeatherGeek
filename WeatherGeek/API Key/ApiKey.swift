@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import MapKit
 
 class ApiKey {
     static let API_KEY: String = "b5fa41a8a2329580a8447e09b138e7c4"
