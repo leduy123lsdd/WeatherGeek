@@ -9,4 +9,8 @@ target 'WeatherGeek' do
 pod 'SDWebImage'
 
 
+    target 'WidgetWeather' do
+        pod 'SDWebImage'
+    end
+
 end

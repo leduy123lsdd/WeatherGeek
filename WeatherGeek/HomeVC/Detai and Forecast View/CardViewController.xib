@@ -148,7 +148,6 @@
                 </stackView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="LXb-19-VMB">
                     <rect key="frame" x="0.0" y="128" width="320" height="132"/>
-                    <color key="backgroundColor" red="0.086123224649999996" green="0.69590666749999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="132" id="ciI-jR-8dL"/>
                     </constraints>
@@ -162,10 +161,9 @@
                 </collectionView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Rc2-9A-u6s">
                     <rect key="frame" x="0.0" y="260" width="320" height="308"/>
-                    <color key="backgroundColor" red="0.086123224649999996" green="0.69590666749999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" red="0.086123224649999996" green="0.69590666749999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="LXb-19-VMB" firstAttribute="top" secondItem="vfQ-SM-GNF" secondAttribute="bottom" constant="10" id="29f-dm-a11"/>
                 <constraint firstItem="4nm-jt-JkI" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="4KI-xh-0tt"/>

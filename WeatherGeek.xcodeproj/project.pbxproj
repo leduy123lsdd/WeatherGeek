@@ -37,7 +37,9 @@
 		0CDEDA22247051BA00378D27 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CDEDA21247051BA00378D27 /* MapKit.framework */; };
 		0CDEDA242471251A00378D27 /* MyAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDEDA232471251A00378D27 /* MyAnnotationView.swift */; };
 		0CDEDA28247237E600378D27 /* SearchAddressVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDEDA27247237E600378D27 /* SearchAddressVC.swift */; };
+		0CF1131324AA4F1C008FADCA /* Location.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0CF1131124AA4F1C008FADCA /* Location.xcdatamodeld */; };
 		AEC959D1F0BF9C6D65B6EADF /* Pods_WeatherGeek.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BCFDE9FFBC81B4CC607E371 /* Pods_WeatherGeek.framework */; };
+		F0CE101607EBDD4F2F473381 /* Pods_WeatherGeek_WidgetWeather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9130FCF0C9DB1E69902112D0 /* Pods_WeatherGeek_WidgetWeather.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,9 +100,13 @@
 		0CDEDA21247051BA00378D27 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0CDEDA232471251A00378D27 /* MyAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAnnotationView.swift; sourceTree = "<group>"; };
 		0CDEDA27247237E600378D27 /* SearchAddressVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAddressVC.swift; sourceTree = "<group>"; };
+		0CF1131224AA4F1C008FADCA /* Location.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Location.xcdatamodel; sourceTree = "<group>"; };
 		5BCFDE9FFBC81B4CC607E371 /* Pods_WeatherGeek.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherGeek.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E25525A04D4ABA45338A3B /* Pods-WeatherGeek.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherGeek.release.xcconfig"; path = "Target Support Files/Pods-WeatherGeek/Pods-WeatherGeek.release.xcconfig"; sourceTree = "<group>"; };
 		77666CE5248F7C50E71A3CC2 /* Pods-WeatherGeek.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherGeek.debug.xcconfig"; path = "Target Support Files/Pods-WeatherGeek/Pods-WeatherGeek.debug.xcconfig"; sourceTree = "<group>"; };
+		9130FCF0C9DB1E69902112D0 /* Pods_WeatherGeek_WidgetWeather.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeatherGeek_WidgetWeather.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4A81EE776EFC76349804BF3 /* Pods-WeatherGeek-WidgetWeather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherGeek-WidgetWeather.debug.xcconfig"; path = "Target Support Files/Pods-WeatherGeek-WidgetWeather/Pods-WeatherGeek-WidgetWeather.debug.xcconfig"; sourceTree = "<group>"; };
+		F7338AEAEAF564786188F708 /* Pods-WeatherGeek-WidgetWeather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherGeek-WidgetWeather.release.xcconfig"; path = "Target Support Files/Pods-WeatherGeek-WidgetWeather/Pods-WeatherGeek-WidgetWeather.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +115,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C4AE8C0247F618D00518259 /* NotificationCenter.framework in Frameworks */,
+				F0CE101607EBDD4F2F473381 /* Pods_WeatherGeek_WidgetWeather.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +241,7 @@
 				0CDEDA0E24704C8700378D27 /* Assets.xcassets */,
 				0CDEDA1024704C8700378D27 /* LaunchScreen.storyboard */,
 				0CDEDA1324704C8700378D27 /* Info.plist */,
+				0CF1131124AA4F1C008FADCA /* Location.xcdatamodeld */,
 			);
 			path = WeatherGeek;
 			sourceTree = "<group>";
@@ -273,6 +281,7 @@
 				0CDEDA21247051BA00378D27 /* MapKit.framework */,
 				5BCFDE9FFBC81B4CC607E371 /* Pods_WeatherGeek.framework */,
 				0C4AE8BF247F618D00518259 /* NotificationCenter.framework */,
+				9130FCF0C9DB1E69902112D0 /* Pods_WeatherGeek_WidgetWeather.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -298,6 +307,8 @@
 			children = (
 				77666CE5248F7C50E71A3CC2 /* Pods-WeatherGeek.debug.xcconfig */,
 				74E25525A04D4ABA45338A3B /* Pods-WeatherGeek.release.xcconfig */,
+				C4A81EE776EFC76349804BF3 /* Pods-WeatherGeek-WidgetWeather.debug.xcconfig */,
+				F7338AEAEAF564786188F708 /* Pods-WeatherGeek-WidgetWeather.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -309,6 +320,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0C4AE8CE247F618D00518259 /* Build configuration list for PBXNativeTarget "WidgetWeather" */;
 			buildPhases = (
+				1FCF3FE094EDCE8B1D38DE50 /* [CP] Check Pods Manifest.lock */,
 				0C4AE8BA247F618D00518259 /* Sources */,
 				0C4AE8BB247F618D00518259 /* Frameworks */,
 				0C4AE8BC247F618D00518259 /* Resources */,
@@ -428,6 +440,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1FCF3FE094EDCE8B1D38DE50 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WeatherGeek-WidgetWeather-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		420971D7280C9C1F2858A1CE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -469,6 +503,7 @@
 				0CDEDA28247237E600378D27 /* SearchAddressVC.swift in Sources */,
 				0C4AE8B9247D082700518259 /* Extention.swift in Sources */,
 				0C6BCEA5247630DA0084DF3D /* WeekForecastCell.swift in Sources */,
+				0CF1131324AA4F1C008FADCA /* Location.xcdatamodeld in Sources */,
 				0CDEDA242471251A00378D27 /* MyAnnotationView.swift in Sources */,
 				0CDEDA0A24704C8300378D27 /* HomeViewController.swift in Sources */,
 				0C3CAA54247AC5C500560996 /* CardViewController.swift in Sources */,
@@ -521,6 +556,7 @@
 /* Begin XCBuildConfiguration section */
 		0C4AE8CC247F618D00518259 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C4A81EE776EFC76349804BF3 /* Pods-WeatherGeek-WidgetWeather.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9M46AU3YMQ;
@@ -540,6 +576,7 @@
 		};
 		0C4AE8CD247F618D00518259 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F7338AEAEAF564786188F708 /* Pods-WeatherGeek-WidgetWeather.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9M46AU3YMQ;
@@ -742,6 +779,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0CF1131124AA4F1C008FADCA /* Location.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0CF1131224AA4F1C008FADCA /* Location.xcdatamodel */,
+			);
+			currentVersion = 0CF1131224AA4F1C008FADCA /* Location.xcdatamodel */;
+			path = Location.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 0CDED9FA24704C8300378D27 /* Project object */;
 }

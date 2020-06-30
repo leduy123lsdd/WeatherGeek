@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import SDWebImage
+import CoreData
 
 class HomeViewController: UIViewController {
     
@@ -20,7 +21,6 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var centerVerticalXImage: NSLayoutConstraint!
     
     var searchAddressVC:SearchAddressVC! = nil
-    var settingView: SettingViewController! = nil
     
     var getWeatherFacade:WeatherDataRequest?
     var getWeatherDataServiceResponse:CurrentWeatherData?
@@ -47,13 +47,16 @@ class HomeViewController: UIViewController {
     var runningAnimations = [UIViewPropertyAnimator]()
     var animationProgressWhenInterrupted:CGFloat = 0
     
+    var region:[NSManagedObject] = []
+    var currentSearchedLocation:CLLocation?
+    var regionName = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         searchAddressVC = storyboard!.instantiateViewController(identifier: "SearchAddressVC") as? SearchAddressVC
         searchAddressVC.searchAddVCDelegate = self
-        settingView = storyboard!.instantiateViewController(identifier: "SettingViewController") as? SettingViewController
         setupCard()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.appDelegate = self
@@ -74,17 +77,28 @@ class HomeViewController: UIViewController {
             }
         }
         
+//        save(lat: 12.2323, lon: 123.2323, regionName: "hanoi")
+//        save(lat: 12.2323, lon: 123.2323, regionName: "Hanoi")
+//
         
         
+        fetchData { (data) in
+            self.region = data
+            for dt in self.region {
+////                print(dt.value(forKey: "lat"))
+////                print(dt.value(forKey: "lon"))
+                print(dt.value(forKey: "regionname"))
+//                self.deleteData(deleteObject: dt)
+            }
+        }
+        
+//        deleteData(deleteObject: region[0])
     }
     
-    func animateBackground() {
-        var reverse = false
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: [.repeat, .curveLinear], animations: {
-            reverse = !reverse
-            self.centerVerticalXImage.constant = (reverse ? -10 : 10)
-        }, completion: nil)
-
+    func changeIcon(iconName:String){
+        if UIApplication.shared.supportsAlternateIcons {
+            UIApplication.shared.setAlternateIconName(iconName)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,28 +131,32 @@ class HomeViewController: UIViewController {
         self.navigationController?.pushViewController(searchAddressVC, animated: true)
     }
     
-    @IBAction func settingBtnAction(_ sender: Any) {
-        self.navigationController?.pushViewController(settingView, animated: true)
+    //MARK: - add location book mark
+    @IBAction func bookMarkLocationAction(_ sender: Any) {
+        if let location = currentSearchedLocation {
+            let coordinate = location.coordinate
+            self.save(lat: coordinate.latitude, lon: coordinate.longitude, regionName: self.regionName)
+            _ = Alert.showAlert(on: self, withTitle: "Save successed!", message: "")
+        }
     }
     
     //MARK: - services
     private func getWeatherDataService(lat:Double,lon:Double,completion: @escaping((_ dataResponse: CurrentWeatherData)->Void)){
-        
-            self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
-            self.getWeatherFacade?.getCurrentWeatherData { [weak self] result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let weatherData):
-                    completion(weatherData)
-                }
+        self.currentSearchedLocation = CLLocation(latitude: lat, longitude: lon)
+        self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
+        self.getWeatherFacade?.getCurrentWeatherData { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let weatherData):
+                completion(weatherData)
             }
-        
+        }
     }
     
     private func getHourlyWeatherDataService(lat:Double,lon:Double,completion: @escaping((_ dataResponse: CurrentWeatherData)->Void)) {
         self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
-        self.getWeatherFacade?.getHourlyWeatherData { [weak self] result in
+        self.getWeatherFacade?.getHourlyWeatherData { result in
             
             switch result {
             case .failure(let error):
@@ -152,7 +170,7 @@ class HomeViewController: UIViewController {
     
     private func getWeekWeatherDataService(lat:Double,lon:Double,completion: @escaping((_ dataResponse: CurrentWeatherData)->Void)) {
         self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
-        self.getWeatherFacade?.getWeekWeather { [weak self] result in
+        self.getWeatherFacade?.getWeekWeather { result in
             
             switch result {
             case .failure(let error):
@@ -168,6 +186,9 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async {
             
             guard let weather = data.getWeather() else {fatalError()}
+            guard let name = data.name else {fatalError()}
+            
+            
             
             self.weatherSumLb.text = (weather.description ?? "Failed to load data.").capitalizingFirstLetter()
             
@@ -175,26 +196,50 @@ class HomeViewController: UIViewController {
                 switch id {
                 case 200...232:
                     self.imageWeather.image = UIImage(named: "Thunderstorm.png")
+                    self.changeIcon(iconName: "Thunderstorm.png")
                 case 300...321:
                     self.imageWeather.image = UIImage(named: "Drizzle.png")
+                    self.changeIcon(iconName: "Drizzle.png")
                 case 500...531:
                     self.imageWeather.image = UIImage(named: "Rain.png")
+                    self.changeIcon(iconName: "Rain.png")
                 case 600...622:
                     self.imageWeather.image = UIImage(named: "Snow.png")
+                    self.changeIcon(iconName: "Snow.png")
                 case 701...781:
                     self.imageWeather.image = UIImage(named: "Atmosphere.png")
+                    self.changeIcon(iconName: "Atmosphere.png")
                 case 800:
                     self.imageWeather.image = UIImage(named: "Clear.png")
+                    self.changeIcon(iconName: "Clear.png")
                 case 801...804:
                     self.imageWeather.image = UIImage(named: "Clouds.png")
+                    self.changeIcon(iconName: "Clouds.png")
                 default:
                     self.imageWeather.image = UIImage(named: "icons8-rainbow-500.png")
+                    self.changeIcon(iconName: "icons8-rainbow-500.png")
                 }
             }
+            
+            self.regionName = name
+            self.placeLb.text = name
+            
+            // get the current date and time
+            let currentDateTime = Date()
+
+            // initialize the date formatter and set the style
+            let formatter = DateFormatter()
+            formatter.timeStyle = .short
+            formatter.dateStyle = .long
+
+            // get the date time String from the date object
+            self.dateTimeLb.text = formatter.string(from: currentDateTime) // October 8, 2016 at 10:48:53 PM
+            
             
             if let placemark = location, let city = placemark.locality, let nameCity = placemark.name {
                 self.placeLb.fadeTransition(0.4)
                 self.placeLb.text = "\(city), \(nameCity)"
+                self.regionName = city
             }
         }
         
@@ -245,10 +290,9 @@ class HomeViewController: UIViewController {
         self.view.addSubview(cardViewController.view)
         
         cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - cardHandleAreaHeight, width: self.view.bounds.width, height: cardHeight)
-        
         cardViewController.view.clipsToBounds = true
         
-        let tapGestureRezognizer = UITapGestureRecognizer(target: self, action: #selector(HomeViewController.handleCardTap(recognize:)))
+//        _ = UITapGestureRecognizer(target: self, action: #selector(HomeViewController.handleCardTap(recognize:)))
         let panGestureRezognizer = UIPanGestureRecognizer(target: self, action: #selector(HomeViewController.handleCardPan(recognize:)))
         
         cardViewController.view.addGestureRecognizer(panGestureRezognizer)
@@ -261,6 +305,47 @@ class HomeViewController: UIViewController {
         cardViewController.view.layer.shadowOffset = .zero
         cardViewController.view.layer.shadowRadius = 3
         
+    }
+    
+    //MARK: - save, fetch, delete data in core data
+    func save(lat:Double, lon:Double, regionName:String){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "Region", in: managedContext)!
+        let region = NSManagedObject(entity: entity, insertInto: managedContext)
+        region.setValue(lat, forKey: "lat")
+        region.setValue(lon, forKey: "lon")
+        region.setValue(regionName, forKey: "regionname")
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Error at saving location data: \(error)")
+        }
+    }
+    
+    func fetchData(dataReturn:((_ data:[NSManagedObject])->Void)?){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Region")
+        do {
+            region = try managedContext.fetch(fetchRequest)
+            if let completion = dataReturn {
+                completion(region)
+            }
+        } catch let error as NSError {
+            print("error at fetch data from region entity: \(error)")
+        }
+    }
+    
+    func deleteData(deleteObject:NSManagedObject) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        do {
+            managedContext.delete(deleteObject)
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Error at delete data: \(error)")
+        }
     }
 }
 

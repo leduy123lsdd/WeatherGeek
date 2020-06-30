@@ -25,3 +25,17 @@ extension UIView {
         layer.add(animation, forKey: CATransitionType.fade.rawValue)
     }
 }
+
+class Alert {
+    var timer: Timer?
+    
+    public static func showAlert(on vc:UIViewController, withTitle: String, message:String){
+        let alert = UIAlertController(title: withTitle, message: message, preferredStyle: .alert)
+        DispatchQueue.main.async {
+            vc.present(alert, animated: true)
+            alert.dismiss(animated: true, completion: nil)
+        }
+        
+    }
+}
+

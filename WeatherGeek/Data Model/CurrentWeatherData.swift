@@ -13,6 +13,7 @@ class CurrentWeatherData: Decodable {
     var main:Main?
     var wind:Wind?
     var clouds:Cloud?
+    var name:String?
     
     func getWeather() -> Weather? {
         if self.weather!.count > 0 {
@@ -97,6 +98,7 @@ class Daily:Decodable {
         guard let todayDate = formatter.date(from: today) else { fatalError("\nCan't get today date") }
         let myCalendar = Calendar(identifier: .gregorian)
         let weekDay = myCalendar.component(.weekday, from: todayDate)
+        
         
         switch weekDay {
         case 1:

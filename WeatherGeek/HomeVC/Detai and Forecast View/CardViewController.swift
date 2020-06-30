@@ -37,6 +37,12 @@ class CardViewController: UIViewController {
         tableView.rowHeight = 50
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        collectionView.backgroundColor = UIColor.clear
+        tableView.backgroundColor = UIColor.clear
+    }
+    
     func parseData(data:CurrentWeatherData){
         DispatchQueue.main.async {
             guard let main = data.main else {fatalError()}

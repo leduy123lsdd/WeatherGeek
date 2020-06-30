@@ -8,9 +8,9 @@
 
 import UIKit
 import NotificationCenter
-
 import MapKit
 import CoreLocation
+import SDWebImage
 
 class TodayViewController: UIViewController, NCWidgetProviding {
     
@@ -20,37 +20,55 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     @IBOutlet weak var locationLb: UILabel!
     @IBOutlet weak var tempertureLb: UILabel!
     
+    
+    @IBOutlet weak var containerView: UIView!
+    
     var getWeatherFacade:WeatherDataRequest?
+    var result: CurrentWeatherData?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        
+    }
+    
+    func updateUI(result: CurrentWeatherData){
+        DispatchQueue.main.async {
+            guard let main = result.main else {fatalError()}
+            guard let weather = result.getWeather() else {fatalError()}
+            guard let description = result.getWeather()?.description else {fatalError()}
+            
+            let temp = Int((main.temp ?? 273.15) - 273.15)
+            let tempFeel = Int((main.feels_like ?? 273.15) - 273.15)
+            
+            self.descriptionLb.text = description.capitalizingFirstLetter()
+            self.tempertureLb.text = "\(temp)°"
+            self.feelLikeLb.text = "Feel like: \(tempFeel)°"
+            if let url = URL(string: ApiKey.getIconAPI(iconName: weather.icon ?? "")) {
+                self.weatherIcon.sd_setImage(with: url, completed: nil)
+            } else {
+                fatalError("Can't get icon url.")
+            }
+            self.locationLb.text = "Tp.Hà Nội"
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let rs = self.result {
+            self.updateUI(result: rs)
+        } else {
+            if let currentLocation = getCurrentLocation() {
+                getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
+                    self.result = result
+                    self.updateUI(result: result)
+                }
+            }
+        }
     }
         
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
-        // Perform any setup necessary in order to update the view.
         
-        // If an error is encountered, use NCUpdateResult.Failed
-        // If there's no update required, use NCUpdateResult.NoData
-        // If there's an update, use NCUpdateResult.NewData
         
-//        if let currentLocation = getCurrentLocation() {
-//            getWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (result) in
-//                self.updateUI(data: result)
-//                self.updateUICardView(data: result)
-//                self.getWeatherDataServiceResponse = result
-//            }
-//            self.getHourlyWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (data) in
-//                self.getHourlyDataServiceResponde = data
-//                self.updateUICardView(dataHourlyForecast: data)
-//            }
-//            self.getWeekWeatherDataService(lat: currentLocation.latitude, lon: currentLocation.longitude) { (data) in
-//                self.getWeatherDataServiceResponse = data
-//                self.updateUICardView(dataWeekForecast: data)
-//            }
-//        }
         
         completionHandler(NCUpdateResult.newData)
     }
@@ -89,5 +107,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         } else {
             return nil
         }
+    }
+}
+
+
+extension String {
+    func capitalizingFirstLetter() -> String {
+      return prefix(1).uppercased() + self.lowercased().dropFirst()
     }
 }
