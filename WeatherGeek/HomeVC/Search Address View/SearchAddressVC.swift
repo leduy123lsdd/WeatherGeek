@@ -72,6 +72,7 @@ class SearchAddressVC: UIViewController, CLLocationManagerDelegate {
         locationSearchTable.mapView = mapView
         
         let searchBar = resultSearchController!.searchBar
+        searchBar.searchTextField.textColor = UIColor.white
         searchBar.sizeToFit()
         searchBar.placeholder = "Search for places"
         searchBar.setShowsCancelButton(true, animated: true)

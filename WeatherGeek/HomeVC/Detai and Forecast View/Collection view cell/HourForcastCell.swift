@@ -11,7 +11,6 @@ import SDWebImage
 
 class HourForcastCell: UICollectionViewCell {
     
-    
     @IBOutlet weak var hourLb: UILabel!
     @IBOutlet weak var iconIm: UIImageView!
     @IBOutlet weak var temperatureLb: UILabel!

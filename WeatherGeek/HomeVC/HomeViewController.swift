@@ -50,11 +50,12 @@ class HomeViewController: UIViewController {
     var region:[NSManagedObject] = []
     var currentSearchedLocation:CLLocation?
     var regionName = ""
+    var savedLocationVC:SavedLocationController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        self.navigationController?.navigationBar.barTintColor = UIColor.clear
         searchAddressVC = storyboard!.instantiateViewController(identifier: "SearchAddressVC") as? SearchAddressVC
         searchAddressVC.searchAddVCDelegate = self
         setupCard()
@@ -77,22 +78,23 @@ class HomeViewController: UIViewController {
             }
         }
         
-//        save(lat: 12.2323, lon: 123.2323, regionName: "hanoi")
-//        save(lat: 12.2323, lon: 123.2323, regionName: "Hanoi")
-//
+        //        save(lat: 12.2323, lon: 123.2323, regionName: "hanoi")
+        //        save(lat: 12.2323, lon: 123.2323, regionName: "Hanoi")
+        //
         
         
-        fetchData { (data) in
-            self.region = data
-            for dt in self.region {
-////                print(dt.value(forKey: "lat"))
-////                print(dt.value(forKey: "lon"))
-                print(dt.value(forKey: "regionname"))
-//                self.deleteData(deleteObject: dt)
-            }
-        }
+        //        fetchData { (data) in
+        //            self.region = data
+        //            for dt in self.region {
+        ////                print(dt.value(forKey: "lat"))
+        ////                print(dt.value(forKey: "lon"))
+        //                print(dt.value(forKey: "regionname"))
+        //                self.deleteData(deleteObject: dt)
+        //            }
+        //        }
         
-//        deleteData(deleteObject: region[0])
+        //        deleteData(deleteObject: region[0])
+        
     }
     
     func changeIcon(iconName:String){
@@ -127,17 +129,34 @@ class HomeViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    //MARK: - IBACtion
     @IBAction func searchBtnAction(_ sender: Any) {
         self.navigationController?.pushViewController(searchAddressVC, animated: true)
     }
     
     //MARK: - add location book mark
     @IBAction func bookMarkLocationAction(_ sender: Any) {
+        _ = Alert.showAlert(on: self, withTitle: "Save successed!", message: "")
         if let location = currentSearchedLocation {
             let coordinate = location.coordinate
+            
+            fetchData { (data) in
+                self.region = data
+            }
+            for item in region {
+                if (item.value(forKey: "regionname") as! String) == self.regionName {
+                    return
+                }
+            }
             self.save(lat: coordinate.latitude, lon: coordinate.longitude, regionName: self.regionName)
-            _ = Alert.showAlert(on: self, withTitle: "Save successed!", message: "")
+            
         }
+    }
+    
+    
+    @IBAction func ShowSavedLocationAction(_ sender: Any) {
+        savedLocationVC = storyboard!.instantiateViewController(identifier: "SavedLocationController") as? SavedLocationController
+        navigationController?.pushViewController(savedLocationVC!, animated: true)
     }
     
     //MARK: - services
@@ -226,12 +245,12 @@ class HomeViewController: UIViewController {
             
             // get the current date and time
             let currentDateTime = Date()
-
+            
             // initialize the date formatter and set the style
             let formatter = DateFormatter()
             formatter.timeStyle = .short
             formatter.dateStyle = .long
-
+            
             // get the date time String from the date object
             self.dateTimeLb.text = formatter.string(from: currentDateTime) // October 8, 2016 at 10:48:53 PM
             
@@ -262,10 +281,10 @@ class HomeViewController: UIViewController {
     private func getCurrentLocation() -> CLLocationCoordinate2D? {
         locManager.requestWhenInUseAuthorization()
         var currentLocation: CLLocation?
-
+        
         if
-           CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
-           CLLocationManager.authorizationStatus() ==  .authorizedAlways
+            CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
+                CLLocationManager.authorizationStatus() ==  .authorizedAlways
         {
             currentLocation = locManager.location
         }
@@ -292,7 +311,7 @@ class HomeViewController: UIViewController {
         cardViewController.view.frame = CGRect(x: 0, y: self.view.frame.height - cardHandleAreaHeight, width: self.view.bounds.width, height: cardHeight)
         cardViewController.view.clipsToBounds = true
         
-//        _ = UITapGestureRecognizer(target: self, action: #selector(HomeViewController.handleCardTap(recognize:)))
+        //        _ = UITapGestureRecognizer(target: self, action: #selector(HomeViewController.handleCardTap(recognize:)))
         let panGestureRezognizer = UIPanGestureRecognizer(target: self, action: #selector(HomeViewController.handleCardPan(recognize:)))
         
         cardViewController.view.addGestureRecognizer(panGestureRezognizer)
