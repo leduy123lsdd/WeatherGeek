@@ -78,23 +78,6 @@ class HomeViewController: UIViewController {
             }
         }
         
-        //        save(lat: 12.2323, lon: 123.2323, regionName: "hanoi")
-        //        save(lat: 12.2323, lon: 123.2323, regionName: "Hanoi")
-        //
-        
-        
-        //        fetchData { (data) in
-        //            self.region = data
-        //            for dt in self.region {
-        ////                print(dt.value(forKey: "lat"))
-        ////                print(dt.value(forKey: "lon"))
-        //                print(dt.value(forKey: "regionname"))
-        //                self.deleteData(deleteObject: dt)
-        //            }
-        //        }
-        
-        //        deleteData(deleteObject: region[0])
-        
     }
     
     func changeIcon(iconName:String){

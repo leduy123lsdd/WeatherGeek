@@ -65,7 +65,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             }
         }
     }
-        
+    
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
         
         
@@ -76,15 +76,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     
     private func getWeatherDataService(lat:Double,lon:Double,completion: @escaping((_ dataResponse: CurrentWeatherData)->Void)){
         
-            self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
-            self.getWeatherFacade?.getCurrentWeatherData { [weak self] result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let weatherData):
-                    completion(weatherData)
-                }
+        self.getWeatherFacade = WeatherDataRequest(lat: lat, lon: lon)
+        self.getWeatherFacade?.getCurrentWeatherData { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let weatherData):
+                completion(weatherData)
             }
+        }
         
     }
     
@@ -92,10 +92,10 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     private func getCurrentLocation() -> CLLocationCoordinate2D? {
         locManager.requestWhenInUseAuthorization()
         var currentLocation: CLLocation?
-
+        
         if
-           CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
-           CLLocationManager.authorizationStatus() ==  .authorizedAlways
+            CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
+                CLLocationManager.authorizationStatus() ==  .authorizedAlways
         {
             currentLocation = locManager.location
         }
@@ -113,6 +113,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
 extension String {
     func capitalizingFirstLetter() -> String {
-      return prefix(1).uppercased() + self.lowercased().dropFirst()
+        return prefix(1).uppercased() + self.lowercased().dropFirst()
     }
 }

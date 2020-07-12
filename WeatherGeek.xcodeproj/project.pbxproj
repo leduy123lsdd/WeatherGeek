@@ -583,8 +583,9 @@
 			baseConfigurationReference = C4A81EE776EFC76349804BF3 /* Pods-WeatherGeek-WidgetWeather.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9M46AU3YMQ;
+				DEVELOPMENT_TEAM = 8Y4C674JQ3;
 				INFOPLIST_FILE = WidgetWeather/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -603,8 +604,9 @@
 			baseConfigurationReference = F7338AEAEAF564786188F708 /* Pods-WeatherGeek-WidgetWeather.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9M46AU3YMQ;
+				DEVELOPMENT_TEAM = 8Y4C674JQ3;
 				INFOPLIST_FILE = WidgetWeather/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -652,6 +654,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8Y4C674JQ3;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -712,6 +715,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 8Y4C674JQ3;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -739,7 +743,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9M46AU3YMQ;
+				DEVELOPMENT_TEAM = 8Y4C674JQ3;
 				INFOPLIST_FILE = WeatherGeek/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -759,7 +763,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9M46AU3YMQ;
+				DEVELOPMENT_TEAM = 8Y4C674JQ3;
 				INFOPLIST_FILE = WeatherGeek/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

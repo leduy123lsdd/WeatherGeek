@@ -21,11 +21,12 @@ class SavedLocationCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         self.contentView.backgroundColor = UIColor.clear
-        
+        self.selectionStyle = .none
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        
     }
     
     func parseData(data:NSManagedObject){
@@ -34,12 +35,9 @@ class SavedLocationCell: UITableViewCell {
             let lat = data.value(forKey: "lat") as! Double
             let lon = data.value(forKey: "lon") as! Double
             
-            
-            
             self.getWeatherDataService(lat: lat, lon: lon) { (data) in
                 guard let main = data.main else {fatalError()}
                 let temp = Int((main.temp ?? 273.15) - 273.15)
-                
                 
                 DispatchQueue.main.async {
                     self.tempratureLb.text = "\(temp)°"
